@@ -1,12 +1,15 @@
 package dados;
 
+import java.util.ArrayList;
+
 public class Aposta {
     private String nomeApostador;
     private int CPF;
     private int registroDeAposta;
-    private int[] numerosApostados;
+    // private int[] numerosApostados;
+    private ArrayList<Integer> numerosApostados;
 
-    public Aposta(String nomeApostador, int CPF, int registroDeAposta, int[] numerosApostados) {
+    public Aposta(String nomeApostador, int CPF, int registroDeAposta, ArrayList<Integer> numerosApostados) {
         this.nomeApostador = nomeApostador;
         this.CPF = CPF;
         this.registroDeAposta = registroDeAposta;
@@ -25,11 +28,14 @@ public class Aposta {
         return registroDeAposta;
     }
 
-    public int[] getNumerosApostados() {
+    public ArrayList<Integer> getNumerosApostados() {
         return numerosApostados;
     }
 
     public String toString() {
-        return "Nome do apostador: " + nomeApostador + "\nCPF: " + CPF + "\nRegistro da aposta: " + registroDeAposta;
+        return "Nome do apostador: " + nomeApostador +
+                "\nCPF: " + CPF +
+                "\nRegistro da aposta: " + registroDeAposta +
+                "\nNúmeros apostados: " + numerosApostados.toString();
     }
 }

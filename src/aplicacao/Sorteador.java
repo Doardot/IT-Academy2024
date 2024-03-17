@@ -1,6 +1,12 @@
 package aplicacao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import dados.*;
 
@@ -12,14 +18,29 @@ public class Sorteador {
         in = new Scanner(System.in);
         todasApostas = new TodasApostas();
 
-        // objetos de teste
-        Aposta a = new Aposta("João", 123456789, 1,
-                new int[] { 1, 2, 3, 4, 5 });
-        Aposta b = new Aposta("Maria", 987654321, 2,
-                new int[] { 6, 7, 8, 9, 10 });
+        // Array de teste
+        ArrayList<Integer> numerosApostados = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+                14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25));
+
+        // Objetos de teste
+        Aposta a = new Aposta("João", 123456789, 1, numerosApostados);
+        Aposta b = new Aposta("Maria", 987654321, 2, numerosApostados);
+        Aposta c = new Aposta("José", 123456789, 3, numerosApostados);
+        Aposta d = new Aposta("Ana", 987654321, 4, numerosApostados);
+
+        /*
+         * Formato int[]
+         * Aposta d = new Aposta("Ana", 987654321, 4,
+         * new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+         * 19, 20, 21, 22, 23, 24,
+         * 25 });
+         */
+
         todasApostas.cadastraApostas(a);
         todasApostas.cadastraApostas(b);
-        // ----------------
+        todasApostas.cadastraApostas(c);
+        todasApostas.cadastraApostas(d);
+
         menu();
     }
 
@@ -83,22 +104,26 @@ public class Sorteador {
 
     public void novaApostaEspecifica(String nomeApostador, int CPF) {
         System.out.println("Digite os números apostados: ");
-        int[] numerosApostados = new int[5];
+        // int[] numerosApostados = new int[5];
+        ArrayList<Integer> numerosApostados = new ArrayList<Integer>();
         for (int i = 0; i < 5; i++) {
             while (!in.hasNextInt()) {
                 System.out.println("Número inválido. Digite um número inteiro: ");
                 in.next();
             }
-            numerosApostados[i] = in.nextInt();
+            // numerosApostados[i] = in.nextInt();
+            numerosApostados.add(in.nextInt());
         }
         Aposta a = new Aposta(nomeApostador, CPF, registroDeAposta, numerosApostados);
         todasApostas.cadastraApostas(a);
     }
 
     public void novaApostaRandomica(String nomeApostador, int CPF) {
-        int[] numerosApostados = new int[5];
+        // int[] numerosApostados = new int[5];
+        ArrayList<Integer> numerosApostados = new ArrayList<Integer>();
         for (int i = 0; i < 5; i++) {
-            numerosApostados[i] = (int) (Math.random() * 50 + 1);
+            // numerosApostados[i] = (int) (Math.random() * 50 + 1);
+            numerosApostados.add((int) (Math.random() * 50 + 1));
         }
         Aposta a = new Aposta(nomeApostador, CPF, registroDeAposta, numerosApostados);
         todasApostas.cadastraApostas(a);
@@ -109,9 +134,9 @@ public class Sorteador {
             System.out.println("Nome do apostador: " + a.getNomeApostador());
             System.out.println("CPF: " + a.getCPF());
             System.out.println("Registro da aposta: " + a.getRegistroDeAposta());
-            for (int i = 0; i < 5; i++) {
-                System.out.println("Número apostado: " + a.getNumerosApostados()[i]);
-            }
+            // System.out.println("Números apostados: " +
+            // Arrays.toString(a.getNumerosApostados()));
+            System.out.println("Números apostados: " + a.getNumerosApostados().toString());
             System.out.println();
         }
     }
@@ -126,10 +151,18 @@ public class Sorteador {
             for (int i = 0; i < count; i++) {
                 numerosSorteados.add((int) (Math.random() * 50 + 1));
             }
-            System.out.println(
-                    "Tentativa " + (tentativa + 1) + ": Números sorteados: " + numerosSorteados.toString());
+            /*
+             * System.out.println(
+             * "Tentativa " + (tentativa + 1) + ": Números sorteados: " +
+             * numerosSorteados.toString());
+             */
 
             winnerFound = apuraVencedores(numerosSorteados);
+            if (winnerFound) {
+                System.out.println("\nVencedor encontrado após " + (tentativa) + " rodadas.");
+                System.out.println("\nNúmeros sorteados: " + numerosSorteados.toString());
+                break;
+            }
             if (!winnerFound && numerosSorteados.size() < 31) {
                 int novoNumero = (int) (Math.random() * 50 + 1); // Gera um novo número
                 numerosSorteados.add(novoNumero); // Adiciona o novo número ao sorteio
@@ -138,17 +171,28 @@ public class Sorteador {
         }
 
         if (!winnerFound) {
-            System.out.println("Nenhum vencedor encontrado após " + maxTentativa + " tentativas.");
+            System.out.println("\nNenhum vencedor encontrado após " + maxTentativa + " tentativas.");
+            System.out.println("\nNúmeros sorteados: " + numerosSorteados.toString());
         }
+
+        listaDeNumerosApostados();
     }
 
     public boolean apuraVencedores(ArrayList<Integer> numerosSorteados) {
         ArrayList<Aposta> vencedores = new ArrayList<Aposta>();
         for (Aposta a : todasApostas.getApostas()) {
-            int[] numerosApostados = a.getNumerosApostados();
+            // int[] numerosApostados = a.getNumerosApostados();
+            ArrayList<Integer> numerosApostados = a.getNumerosApostados();
             int count = 0;
-            for (int i = 0; i < numerosApostados.length; i++) {
-                if (numerosSorteados.contains(numerosApostados[i])) {
+            /*
+             * for (int i = 0; i < numerosApostados.length; i++) {
+             * if (numerosSorteados.contains(numerosApostados[i])) {
+             * count++;
+             * }
+             * }
+             */
+            for (int i = 0; i < numerosApostados.size(); i++) {
+                if (numerosSorteados.contains(numerosApostados.get(i))) {
                     count++;
                 }
             }
@@ -158,12 +202,53 @@ public class Sorteador {
         }
 
         if (!vencedores.isEmpty()) {
+            // Ordena a lista de vencedores por nome
+            Collections.sort(vencedores, new Comparator<Aposta>() {
+                @Override
+                public int compare(Aposta a1, Aposta a2) {
+                    return a1.getNomeApostador().compareTo(a2.getNomeApostador());
+                }
+            });
             System.out.println("Vencedores:");
             for (Aposta v : vencedores) {
-                System.out.println("Nome do apostador: " + v.getNomeApostador());
+                System.out.println(
+                        "\nNome do apostador: " + v.getNomeApostador() + "\nNúmeros apostados: " +
+                        // Arrays.toString(v.getNumerosApostados()));
+                                v.getNumerosApostados().toString());
             }
             return true;
         }
         return false;
+    }
+
+    public void listaDeNumerosApostados() {
+        HashMap<Integer, Integer> frequenciaNumeros = new HashMap<>();
+
+        for (Aposta aposta : todasApostas.getApostas()) {
+            for (int numero : aposta.getNumerosApostados()) {
+                frequenciaNumeros.put(numero, frequenciaNumeros.getOrDefault(numero, 0) + 1);
+            }
+        }
+        List<Map.Entry<Integer, Integer>> listaOrdenada = new ArrayList<>(frequenciaNumeros.entrySet());
+
+        Collections.sort(listaOrdenada, new Comparator<Map.Entry<Integer, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Integer, Integer> entry1, Map.Entry<Integer, Integer> entry2) {
+                return entry2.getValue().compareTo(entry1.getValue()); // Ordenação decrescente
+            }
+        });
+
+        System.out.println("\nNúmero Apostado | Quantidade de Apostas");
+        System.out.println("--------------------------------------");
+        for (Map.Entry<Integer, Integer> entry : frequenciaNumeros.entrySet()) {
+            System.out.printf("%-3d | %-4d\n", entry.getKey(), entry.getValue());
+        }
+
+        /*
+         * for (Map.Entry<Integer, Integer> entry : listaOrdenada) {
+         * System.out.println("Número: " + entry.getKey() + " - Quantidade de apostas: "
+         * + entry.getValue());
+         * }
+         */
     }
 }
