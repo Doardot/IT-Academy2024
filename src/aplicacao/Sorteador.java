@@ -19,14 +19,15 @@ public class Sorteador {
         todasApostas = new TodasApostas();
 
         // Array de teste
-        ArrayList<Integer> numerosApostados = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+        ArrayList<Integer> numerosApostados25 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25));
+        ArrayList<Integer> numerosApostados5 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
         // Objetos de teste
-        Aposta a = new Aposta("João", 123456789, 1, numerosApostados);
-        Aposta b = new Aposta("Maria", 987654321, 2, numerosApostados);
-        Aposta c = new Aposta("José", 123456789, 3, numerosApostados);
-        Aposta d = new Aposta("Ana", 987654321, 4, numerosApostados);
+        Aposta a = new Aposta("João", 123456789, 1, numerosApostados25);
+        Aposta b = new Aposta("Maria", 987654321, 2, numerosApostados25);
+        Aposta c = new Aposta("José", 123456789, 3, numerosApostados25);
+        Aposta d = new Aposta("Ana", 987654321, 4, numerosApostados25);
 
         /*
          * Formato int[]
@@ -79,39 +80,50 @@ public class Sorteador {
     private int registroDeAposta = 999;
 
     public void novaAposta() {
-        registroDeAposta++;
-        System.out.println("Digite o nome do apostador: ");
-        String nomeApostador = in.next();
-        System.out.println("Digite o CPF do apostador: ");
-        int CPF = 0;
-        while (!in.hasNextInt()) {
-            System.out.println("CPF inválido. Digite um número inteiro: ");
-            in.next(); // Descarta a entrada inválida
-        }
-        CPF = in.nextInt();
-        System.out
-                .println("Você deseja apostar em números específicos ou deseja que o sistema escolha aleatoriamente? ");
-        System.out.println("1 - Números específicos");
-        System.out.println("2 - Aleatório");
-        System.out.print("Digite a opção desejada: ");
-        int opcao = in.nextInt();
-        if (opcao == 1) {
-            novaApostaEspecifica(nomeApostador, CPF);
-        } else {
-            novaApostaRandomica(nomeApostador, CPF);
+        try {
+            registroDeAposta++;
+            System.out.println("Digite o nome do apostador: ");
+            String nomeApostador = in.next();
+            System.out.println("Digite o CPF do apostador: ");
+            int CPF = 0;
+            while (!in.hasNextInt()) {
+                System.out.println("CPF inválido. Digite um número inteiro: ");
+                in.next(); // Descarta a entrada inválida
+            }
+            CPF = in.nextInt();
+
+            System.out.println(
+                    "Você deseja apostar em números específicos ou deseja que o sistema escolha aleatoriamente? ");
+            System.out.println("1 - Números específicos");
+            System.out.println("2 - Aleatório");
+            int opcao;
+            System.out.print("Digite a opção desejada: ");
+            while (!in.hasNextInt() || ((opcao = in.nextInt()) != 1 && opcao != 2)) {
+                System.out.println("Opção inválida. Digite novamente: ");
+                in.nextLine();
+            }
+            if (opcao == 1) {
+                novaApostaEspecifica(nomeApostador, CPF);
+            } else if (opcao == 2) {
+                novaApostaRandomica(nomeApostador, CPF);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro ao processar a nova aposta: " + e.getMessage());
         }
     }
 
     public void novaApostaEspecifica(String nomeApostador, int CPF) {
         System.out.println("Digite os números apostados: ");
-        // int[] numerosApostados = new int[5];
         ArrayList<Integer> numerosApostados = new ArrayList<Integer>();
+        // int numeroSelecionado;
         for (int i = 0; i < 5; i++) {
-            while (!in.hasNextInt()) {
-                System.out.println("Número inválido. Digite um número inteiro: ");
-                in.next();
+            // while (!in.hasNextInt() && (numeroSelecionado = in.nextInt()) < 1 ||
+            // numeroSelecionado > 50) {
+            while (!in.hasNextInt()) { // validar numeros entre 1 a 50
+                System.out.println("Número inválido. Digite novamente: ");
+                in.nextLine();
             }
-            // numerosApostados[i] = in.nextInt();
             numerosApostados.add(in.nextInt());
         }
         Aposta a = new Aposta(nomeApostador, CPF, registroDeAposta, numerosApostados);
@@ -119,10 +131,8 @@ public class Sorteador {
     }
 
     public void novaApostaRandomica(String nomeApostador, int CPF) {
-        // int[] numerosApostados = new int[5];
         ArrayList<Integer> numerosApostados = new ArrayList<Integer>();
         for (int i = 0; i < 5; i++) {
-            // numerosApostados[i] = (int) (Math.random() * 50 + 1);
             numerosApostados.add((int) (Math.random() * 50 + 1));
         }
         Aposta a = new Aposta(nomeApostador, CPF, registroDeAposta, numerosApostados);
@@ -134,8 +144,6 @@ public class Sorteador {
             System.out.println("Nome do apostador: " + a.getNomeApostador());
             System.out.println("CPF: " + a.getCPF());
             System.out.println("Registro da aposta: " + a.getRegistroDeAposta());
-            // System.out.println("Números apostados: " +
-            // Arrays.toString(a.getNumerosApostados()));
             System.out.println("Números apostados: " + a.getNumerosApostados().toString());
             System.out.println();
         }
@@ -181,16 +189,8 @@ public class Sorteador {
     public boolean apuraVencedores(ArrayList<Integer> numerosSorteados) {
         ArrayList<Aposta> vencedores = new ArrayList<Aposta>();
         for (Aposta a : todasApostas.getApostas()) {
-            // int[] numerosApostados = a.getNumerosApostados();
             ArrayList<Integer> numerosApostados = a.getNumerosApostados();
             int count = 0;
-            /*
-             * for (int i = 0; i < numerosApostados.length; i++) {
-             * if (numerosSorteados.contains(numerosApostados[i])) {
-             * count++;
-             * }
-             * }
-             */
             for (int i = 0; i < numerosApostados.size(); i++) {
                 if (numerosSorteados.contains(numerosApostados.get(i))) {
                     count++;
@@ -213,7 +213,6 @@ public class Sorteador {
             for (Aposta v : vencedores) {
                 System.out.println(
                         "\nNome do apostador: " + v.getNomeApostador() + "\nNúmeros apostados: " +
-                        // Arrays.toString(v.getNumerosApostados()));
                                 v.getNumerosApostados().toString());
             }
             return true;
