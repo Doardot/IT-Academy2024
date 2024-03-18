@@ -27,4 +27,8 @@ public class BetCreator {
 //        }
         return a;
     }
+
+    public void resetBetRegistration() {
+        this.betRegistration = 999;
+    }
 }

@@ -1,8 +1,8 @@
 package aplication;
 
 import data.*;
-
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Bets {
@@ -13,26 +13,31 @@ public class Bets {
     }
 
     public Bet newSpecificBet(String bettorName, int CPF, int betRegistration) {
+        HashSet<Integer> wageredNumbers = new HashSet<>();
         System.out.println("Digite os números apostados: ");
-        ArrayList<Integer> wagaredNumbers = new ArrayList<>();
-        // int numeroSelecionado;
-        for (int i = 0; i < 5; i++) {
-            // while (!in.hasNextInt() && (numeroSelecionado = in.nextInt()) < 1 ||
-            // numeroSelecionado > 50) {
-            while (!in.hasNextInt()) { // validar numeros entre 1 a 50
-                System.out.println("Número inválido. Digite novamente: ");
-                in.nextLine();
+
+        while (wageredNumbers.size() < 5) {
+            try {
+                int number = in.nextInt();
+                if (number < 1 || number > 50) {
+                    System.out.println("Número inválido. Digite um número entre 1 a 50: ");
+                } else if (!wageredNumbers.add(number)) {
+                    System.out.println("Número já apostado. Digite novamente: ");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Digite um número inteiro: ");
+                in.next(); // discard the non-integer input
             }
-            wagaredNumbers.add(in.nextInt());
         }
-        return new Bet(bettorName, CPF, betRegistration, wagaredNumbers);
+        return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
     }
 
     public Bet newRandomBet(String bettorName, int CPF, int betRegistration) {
-        ArrayList<Integer> wagaredNumbers = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            wagaredNumbers.add((int) (Math.random() * 50 + 1));
+        HashSet<Integer> wageredNumbers = new HashSet<>();
+        while (wageredNumbers.size() < 5) {
+            int randomNumber = (int) (Math.random() * 50 + 1);
+            wageredNumbers.add(randomNumber);
         }
-        return new Bet(bettorName, CPF, betRegistration, wagaredNumbers);
+        return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
     }
 }

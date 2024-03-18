@@ -1,8 +1,8 @@
 package aplication;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.*;
+
 import data.*;
 
 public class LotteryUserInterface {
@@ -18,34 +18,9 @@ public class LotteryUserInterface {
         this.betRegistry = new BetRegistry();
         this.bets = new Bets();
         this.betCreator = new BetCreator(betRegistry, bets);
-        this.lotteryRunner = new LotteryRunner(betRegistry);
+        this.lotteryRunner = new LotteryRunner(betRegistry, betCreator);
 
-        initializeTestObjects();
         menu();
-    }
-
-    //CLASSE PARA GERAR OBJETOS DE TESTE - SERÁ APAGADO NA VERSÃO FINAL
-    private void initializeTestObjects() {
-        // Array de teste
-        ArrayList<Integer> numerosApostados5 = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
-            int randomNumber = (int) (Math.random() * 50 + 1); // generates a random number between 1 and 50
-            numerosApostados5.add(randomNumber);
-        }
-        ArrayList<Integer> numerosApostadosMais5 = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
-            int randomNumber = (int) (Math.random() * 50 + 1); // generates a random number between 1 and 50
-            numerosApostadosMais5.add(randomNumber);
-        }
-        ArrayList<Integer> numerosApostados25 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-                14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25));
-
-        // Objetos de teste
-        Bet a = new Bet("João", 123456789, 1, numerosApostadosMais5);
-        Bet b = new Bet("Maria", 987654321, 2, numerosApostados5);
-
-        betRegistry.addBets(a);
-        betRegistry.addBets(b);
     }
 
     public void menu() {
@@ -86,11 +61,15 @@ public class LotteryUserInterface {
             String bettorName = in.next();
             System.out.println("Digite o CPF do apostador: ");
             int CPF = 0;
-            while (!in.hasNextInt()) {
-                System.out.println("CPF inválido. Digite um número inteiro: ");
-                in.next(); // Descarta a entrada inválida
+            while (true) {
+                try{
+                    CPF = in.nextInt();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("CPF inválido. Digite um número inteiro: ");
+                    in.next();
+                }
             }
-            CPF = in.nextInt();
 
             System.out.println(
                     "Você deseja apostar em números específicos ou deseja que o sistema escolha aleatoriamente? ");
@@ -98,10 +77,16 @@ public class LotteryUserInterface {
             System.out.println("2 - Aleatório");
             System.out.print("Digite a opção desejada: ");
             int option = 0;
-            // ****** checar while para ver se a validacao de opcao esta funcional ******
-            while (!in.hasNextInt() || ((option = in.nextInt()) != 1 && option != 2)) {
-                System.out.println("Opção inválida. Digite novamente: ");
-                in.nextLine();
+            while (true) {
+                try {
+                    option = in.nextInt();
+                    if (option != 1 && option != 2) {
+                        throw new InputMismatchException(); // throw exception if option is not 1 or 2
+                    }
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Opção inválida. Digite novamente: ");
+                }
             }
             betCreator.newBet(bettorName, CPF, option);
 

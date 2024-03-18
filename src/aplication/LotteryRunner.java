@@ -2,60 +2,48 @@ package aplication;
 
 import data.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LotteryRunner {
     private BetRegistry betRegistry;
+    private BetCreator betCreator;
 
-    public LotteryRunner(BetRegistry betRegistry) {
+    public LotteryRunner(BetRegistry betRegistry, BetCreator betCreator) {
         this.betRegistry = betRegistry;
+        this.betCreator = betCreator;
     }
 
-    public void runLotteryDraw() {
-        int count = 5; // Número de acertos necessários para vencer
-        int maxAttempt = 26; // Número máximo de tentativas - 25 tentativas
-        HashSet<Integer> drawNumbers = new HashSet<>();
-        boolean winnerFound = false;
+    public void runLotteryDraw() { //metodo esta rodando entre 23 e 26 vezes > corrigir
+        try{
+            betRegistry.closeBets();
+            int count = 5; // number of wagared numbers
+            int maxAttempt = 26; // maximum number of attempts
+            LinkedHashSet<Integer> drawNumbers = new LinkedHashSet<>();
 
-        for (int attempt = 0; attempt < maxAttempt && !winnerFound; attempt++) {
-            //for (int i = 0; i < count; i++) {
-            //**** CHECAR WHILE ***
-            while(drawNumbers.size() < count + attempt) {
-                drawNumbers.add((int) (Math.random() * 50 + 1));
+            for (int attempt = 0; attempt < maxAttempt ; attempt++) {
+                while(drawNumbers.size() < count + attempt) {
+                    drawNumbers.add((int) (Math.random() * 50 + 1));
+                }
+
+                if(determineWinners(drawNumbers)) {
+                    System.out.println("\nVencedor encontrado após " + (attempt) + " rodadas.");
+                    System.out.println("\nNúmeros sorteados: " + drawNumbers.toString());
+                    break;
+                }
+
+                if (drawNumbers.size() == maxAttempt) {
+                    System.out.println("\nNenhum vencedor encontrado após " + maxAttempt + " tentativas.");
+                    System.out.println("\nNúmeros sorteados: " + drawNumbers.toString());
+
+                }
             }
-            /*
-             * System.out.println(
-             * "Tentativa " + (tentativa + 1) + ": Números sorteados: " +
-             * numerosSorteados.toString());
-             */
 
-            winnerFound = determineWinners(drawNumbers);
-            if (winnerFound) {
-                System.out.println("\nVencedor encontrado após " + (attempt) + " rodadas.");
-                System.out.println("\nNúmeros sorteados: " + drawNumbers.toString());
-                break;
-            }
-//            if (!winnerFound && numerosSorteados.size() < 31) {
-//                numerosSorteados.clear(); = metodo para limpar a lista
-//            else {
-//                int novoNumero = (int) (Math.random() * 50 + 1); // Gera um novo número
-//                numerosSorteados.add(novoNumero); // Adiciona o novo número ao sorteio
-//                count = 0; // faz adicionar de 1 em 1
-//            }
+            frequencyOfWagaredNumbers();
+            betRegistry.resetBets();
+            betCreator.resetBetRegistration();
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro ao executar o sorteio: " + e.getMessage());
         }
-
-        if (!winnerFound) {
-            System.out.println("\nNenhum vencedor encontrado após " + maxAttempt + " tentativas.");
-            System.out.println("\nNúmeros sorteados: " + drawNumbers.toString());
-        }
-
-        frequencyOfWagaredNumbers();
     }
 
     private boolean determineWinners(HashSet<Integer> drawNumbers) {
