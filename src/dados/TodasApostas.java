@@ -6,7 +6,7 @@ public class TodasApostas {
     private ArrayList<Aposta> apostas;
 
     public TodasApostas() {
-        apostas = new ArrayList<Aposta>();
+        apostas = new ArrayList<>();
     }
 
     public ArrayList<Aposta> getApostas() {
@@ -17,7 +17,4 @@ public class TodasApostas {
         apostas.add(a);
     }
 
-    public void listaApostas() {
-        //
-    }
 }
