@@ -1,6 +1,6 @@
-package aplicacao;
+package aplication;
 
-import dados.*;
+import data.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,9 +12,9 @@ public class Bets {
         this.in = new Scanner(System.in);
     }
 
-    public Aposta novaApostaEspecifica(String nomeApostador, int CPF, int registroDeAposta) {
+    public Bet newSpecificBet(String bettorName, int CPF, int betRegistration) {
         System.out.println("Digite os números apostados: ");
-        ArrayList<Integer> numerosApostados = new ArrayList<Integer>();
+        ArrayList<Integer> wagaredNumbers = new ArrayList<>();
         // int numeroSelecionado;
         for (int i = 0; i < 5; i++) {
             // while (!in.hasNextInt() && (numeroSelecionado = in.nextInt()) < 1 ||
@@ -23,16 +23,16 @@ public class Bets {
                 System.out.println("Número inválido. Digite novamente: ");
                 in.nextLine();
             }
-            numerosApostados.add(in.nextInt());
+            wagaredNumbers.add(in.nextInt());
         }
-        return new Aposta(nomeApostador, CPF, registroDeAposta, numerosApostados);
+        return new Bet(bettorName, CPF, betRegistration, wagaredNumbers);
     }
 
-    public Aposta novaApostaRandomica(String nomeApostador, int CPF, int registroDeAposta) {
-        ArrayList<Integer> numerosApostados = new ArrayList<Integer>();
+    public Bet newRandomBet(String bettorName, int CPF, int betRegistration) {
+        ArrayList<Integer> wagaredNumbers = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            numerosApostados.add((int) (Math.random() * 50 + 1));
+            wagaredNumbers.add((int) (Math.random() * 50 + 1));
         }
-        return new Aposta(nomeApostador, CPF, registroDeAposta, numerosApostados);
+        return new Bet(bettorName, CPF, betRegistration, wagaredNumbers);
     }
 }
