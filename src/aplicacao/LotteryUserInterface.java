@@ -5,21 +5,20 @@ import java.util.Arrays;
 import java.util.Scanner;
 import dados.*;
 
-public class Sorteador {
+public class LotteryUserInterface {
     private Scanner in = null;
     private TodasApostas todasApostas;
-//    private BetCreator betCreator;
+    private BetCreator betCreator;
     private Bets bets;
     private LotteryRunner lotteryRunner;
 
 
-    public Sorteador() {
+    public LotteryUserInterface() {
         this.in = new Scanner(System.in);
         this.todasApostas = new TodasApostas();
-//        this.betCreator = new BetCreator(todasApostas, bets);
         this.bets = new Bets();
+        this.betCreator = new BetCreator(todasApostas, bets);
         this.lotteryRunner = new LotteryRunner(todasApostas);
-
 
         initializeTestObjects();
         menu();
@@ -81,11 +80,8 @@ public class Sorteador {
         } while (opcao != 0);
     }
 
-    private int registroDeAposta = 999;
-
     public void novaAposta() {
         try {
-            registroDeAposta++;
             System.out.println("Digite o nome do apostador: ");
             String nomeApostador = in.next();
             System.out.println("Digite o CPF do apostador: ");
@@ -100,21 +96,14 @@ public class Sorteador {
                     "Você deseja apostar em números específicos ou deseja que o sistema escolha aleatoriamente? ");
             System.out.println("1 - Números específicos");
             System.out.println("2 - Aleatório");
-            int opcao;
             System.out.print("Digite a opção desejada: ");
+            int opcao = 0;
+            // ****** checar while para ver se a validacao de opcao esta funcional ******
             while (!in.hasNextInt() || ((opcao = in.nextInt()) != 1 && opcao != 2)) {
                 System.out.println("Opção inválida. Digite novamente: ");
                 in.nextLine();
             }
-            if (opcao == 1) {
-                Aposta a = bets.novaApostaEspecifica(nomeApostador, CPF, registroDeAposta);
-                todasApostas.cadastraApostas(a);
-                //bets.novaApostaEspecifica(nomeApostador, CPF, registroDeAposta);
-            } else if (opcao == 2) {
-                Aposta a = bets.novaApostaRandomica(nomeApostador, CPF, registroDeAposta);
-                todasApostas.cadastraApostas(a);
-                //bets.novaApostaRandomica(nomeApostador, CPF, registroDeAposta);
-            }
+            betCreator.novaAposta(nomeApostador, CPF, opcao);
 
         } catch (Exception e) {
             System.out.println("Ocorreu um erro ao processar a nova aposta: " + e.getMessage());

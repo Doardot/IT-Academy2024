@@ -2,7 +2,13 @@ package aplicacao;
 
 import dados.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class LotteryRunner {
     private TodasApostas todasApostas;
@@ -50,7 +56,7 @@ public class LotteryRunner {
         listaDeNumerosApostados();
     }
 
-    public boolean apuraVencedores(ArrayList<Integer> numerosSorteados) {
+    private boolean apuraVencedores(ArrayList<Integer> numerosSorteados) {
         ArrayList<Aposta> vencedores = new ArrayList<Aposta>();
         HashSet<Integer> numerosSorteadosSet = new HashSet<>(numerosSorteados);
         for (Aposta a : todasApostas.getApostas()) {
@@ -61,11 +67,6 @@ public class LotteryRunner {
                     count++;
                 }
             }
-//            for (int i = 0; i < numerosApostados.size(); i++) {
-//                if (numerosSorteados.contains(numerosApostados.get(i))) {
-//                    count++;
-//                }
-//            }
             if (count == 5) {
                 vencedores.add(a);
             }
@@ -90,7 +91,7 @@ public class LotteryRunner {
         return false;
     }
 
-    public void listaDeNumerosApostados() {
+    private void listaDeNumerosApostados() {
         HashMap<Integer, Integer> frequenciaNumeros = new HashMap<>();
 
         for (Aposta aposta : todasApostas.getApostas()) {

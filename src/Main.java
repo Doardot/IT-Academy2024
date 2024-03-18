@@ -1,7 +1,7 @@
-import aplicacao.Sorteador;
+import aplicacao.LotteryUserInterface;
 
 public class Main {
     public static void main(String[] args) {
-        new Sorteador();
+        new LotteryUserInterface();
     }
 }

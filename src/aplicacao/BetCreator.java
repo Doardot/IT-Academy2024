@@ -7,27 +7,24 @@ public class BetCreator {
     private Bets bets;
     private int registroDeAposta = 999;
 
-//    public BetCreator() {
-//        this.todasApostas = todasApostas;
-//        this.bets = bets;
-//    }
-//
-//    public void novaAposta() {
+    public BetCreator(TodasApostas todasApostas, Bets bets) {
+        this.todasApostas = todasApostas;
+        this.bets = bets;
+    }
+
+    public Aposta novaAposta(String nomeApostador, int CPF, int opcao) {
+        Aposta a = null;
 //        try {
-//            registroDeAposta++;
-//            Aposta a;
-//            if (opcao == 1) {
-//                Aposta a = bets.novaApostaEspecifica(nomeApostador, CPF, registroDeAposta);
-//                todasApostas.cadastraApostas(a);
-//                //bets.novaApostaEspecifica(nomeApostador, CPF, registroDeAposta);
-//            } else if (opcao == 2) {
-//                Aposta a = bets.novaApostaRandomica(nomeApostador, CPF, registroDeAposta);
-//                todasApostas.cadastraApostas(a);
-//                //bets.novaApostaRandomica(nomeApostador, CPF, registroDeAposta);
-//            }
-//
+            registroDeAposta++;
+            if (opcao == 1) {
+                a = bets.novaApostaEspecifica(nomeApostador, CPF, registroDeAposta);
+            } else if (opcao == 2) {
+                a = bets.novaApostaRandomica(nomeApostador, CPF, registroDeAposta);
+            }
+            todasApostas.cadastraApostas(a);
 //        } catch (Exception e) {
 //            System.out.println("Ocorreu um erro ao processar a nova aposta: " + e.getMessage());
 //        }
-//    }
+        return a;
+    }
 }
