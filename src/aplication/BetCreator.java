@@ -12,12 +12,16 @@ public class BetCreator {
 
     public Bet newSpecificBet(String bettorName, int CPF, HashSet<Integer> wageredNumbers) {
         betRegistration++;
-        return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
+        Bet bet = new Bet(bettorName, CPF, betRegistration, wageredNumbers);
+        BettingSaveHistory.saveToFile(bet.toString(), "BetHistory.txt");
+        return bet;
     }
 
     public Bet newRandomBet(String bettorName, int CPF, HashSet<Integer> wageredNumbers) {
         betRegistration++;
-        return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
+        Bet bet = new Bet(bettorName, CPF, betRegistration, wageredNumbers);
+        BettingSaveHistory.saveToFile(bet.toString(), "BetHistory.txt");
+        return bet;
     }
 
     public void resetBetRegistration() {

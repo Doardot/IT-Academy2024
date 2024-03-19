@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 public class LotteryRunner {
-    private BetRegistry betRegistry;
-    private BetCreator betCreator;
-    private Awards awards;
+    private final BetRegistry betRegistry;
+    private final BetCreator betCreator;
+    private final Awards awards;
 
     public LotteryRunner(BetRegistry betRegistry, BetCreator betCreator) {
         this.betRegistry = betRegistry;
@@ -67,18 +67,14 @@ public class LotteryRunner {
 
         if (!winners.isEmpty()) {
             // Ordena a lista de vencedores por nome
-            Collections.sort(winners, new Comparator<Bet>() {
-                @Override
-                public int compare(Bet a1, Bet a2) {
-                    return a1.getBettorName().compareTo(a2.getBettorName());
-                }
-            });
+            winners.sort(Comparator.comparing(Bet::getBettorName));
             System.out.println("Vencedores:");
             for (Bet v : winners) {
                 String award = awards.pickRandomAwards();
-                System.out.println(
-                        "\nNome do apostador: " + v.getBettorName() + "\nNúmeros apostados: " +
-                                v.getWagaredNumbers().toString() + "\nPrêmio: " + award);
+                String winnerInfo = "Nome do apostador: " + v.getBettorName() + "\nNúmeros apostados: " +
+                        v.getWagaredNumbers().toString() + "\nPrêmio: " + award;
+                System.out.println(winnerInfo);
+                BettingSaveHistory.saveToFile(winnerInfo, "WinnerHistory.txt");
             }
             return true;
         }
@@ -95,11 +91,8 @@ public class LotteryRunner {
         }
         List<Map.Entry<Integer, Integer>> listaOrdenada = new ArrayList<>(frequencyNumbers.entrySet());
 
-        Collections.sort(listaOrdenada, new Comparator<Map.Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Integer> entry1, Map.Entry<Integer, Integer> entry2) {
-                return entry2.getValue().compareTo(entry1.getValue()); // Ordenação decrescente
-            }
+        listaOrdenada.sort((entry1, entry2) -> {
+            return entry2.getValue().compareTo(entry1.getValue()); // Ordenação decrescente
         });
 
         System.out.println("\nNúmero Apostado | Quantidade de Apostas");

@@ -5,11 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Bet {
-    private String bettorName;
-    private int CPF;
-    private int betRegistration;
-//    private ArrayList<Integer> wagaredNumbers;
-    private HashSet<Integer> wagaredNumbers;
+    private final String bettorName;
+    private final int CPF;
+    private final int betRegistration;
+    private final HashSet<Integer> wagaredNumbers;
 
     public Bet(String bettorName, int CPF, int betRegistration, HashSet<Integer> wagaredNumbers) {
         this.bettorName = bettorName;
@@ -20,14 +19,6 @@ public class Bet {
 
     public String getBettorName() {
         return bettorName;
-    }
-
-    public int getCPF() {
-        return CPF;
-    }
-
-    public int getBetRegistration() {
-        return betRegistration;
     }
 
     public List<Integer> getWagaredNumbers() {

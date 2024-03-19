@@ -3,7 +3,7 @@ package data;
 import java.util.ArrayList;
 
 public class BetRegistry {
-    private ArrayList<Bet> bets;
+    private final ArrayList<Bet> bets;
     private boolean betsOpen;
 
     public BetRegistry() {
