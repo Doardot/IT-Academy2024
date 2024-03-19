@@ -1,7 +1,6 @@
 package aplication;
 
 import data.*;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.InputMismatchException;
@@ -83,6 +82,15 @@ public class LotteryUserInterface {
         } while (option != 0);
     }
 
+    /**
+     * This method is used to create a new bet.
+     * 1- It prompts the bettor to enter their name and CPF. It ensures the CPF is a non-negative integer;
+     * 2- Then asks the user whether they want to bet on specific numbers or have the system choose numbers randomly;
+     * 3- If the bettor chooses to bet on specific numbers, it prompts the bettor to enter 5 numbers;
+     * 4- If the bettor chooses to have the system choose numbers randomly, it generates 5 random numbers;
+     * 5- In both cases, the numbers are limited to the range 1-50;
+     * 6- After the bet is created, it is added to the bet registry.
+     */
     public void newBet() {
         try {
             System.out.println("Digite o nome do apostador: ");
@@ -93,10 +101,10 @@ public class LotteryUserInterface {
                 try{
                     CPF = in.nextInt();
                     if (CPF < 0) {
-                        throw new InputMismatchException(); // throw exception if number is negative
+                        throw new InputMismatchException(); // Throw exception if number is negative
                     }
                     break;
-                } catch (InputMismatchException e) {
+                } catch (InputMismatchException e) { // Catch exception if input is not an integer
                     System.out.println("CPF inválido. Digite um número inteiro: ");
                     in.next();
                 }
@@ -112,7 +120,7 @@ public class LotteryUserInterface {
                 try {
                     option = in.nextInt();
                     if (option != 1 && option != 2) {
-                        throw new InputMismatchException(); // throw exception if option is not 1 or 2
+                        throw new InputMismatchException(); // Throw exception if option is not 1 or 2
                     }
                     Bet a;
                     HashSet<Integer> wageredNumbers = new HashSet<>();
@@ -128,7 +136,7 @@ public class LotteryUserInterface {
                                 }
                             } catch (InputMismatchException e) {
                                 System.out.println("Entrada inválida. Digite um número inteiro: ");
-                                in.next(); // discard the non-integer input
+                                in.next(); // Discard the non-integer input
                             }
                         }
                         a = betCreator.newSpecificBet(bettorName, CPF, wageredNumbers);
@@ -141,12 +149,12 @@ public class LotteryUserInterface {
                     }
                     betRegistry.addBets(a);
                     break;
-                } catch (InputMismatchException e) {
+                } catch (InputMismatchException e) { // Catch exception if input is not an integer
                     System.out.println("Opção inválida. Digite novamente: ");
                     in.nextLine();
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // Catch any other exception
             System.out.println("Ocorreu um erro ao processar a nova aposta: " + e.getMessage());
         }
     }

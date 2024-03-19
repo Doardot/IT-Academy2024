@@ -19,7 +19,7 @@ public class BetRegistry {
         if(betsOpen) {
             this.bets.add(bet);
         } else {
-            //
+            System.out.println("Apostas fechadas.");
         }
     }
 
