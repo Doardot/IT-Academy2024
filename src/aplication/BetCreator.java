@@ -6,28 +6,14 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class BetCreator {
-    private BetRegistry betRegistry;
     private int betRegistration = 999;
     private Scanner in;
 
-    public BetCreator(BetRegistry betRegistry) {
-        this.betRegistry = betRegistry;
+    public BetCreator() {
         this.in = new Scanner(System.in);
     }
 
-    public Bet newBet(String bettorName, int CPF, int option) {
-        Bet a = null;
-            betRegistration++;
-            if (option == 1) {
-                a = newSpecificBet(bettorName, CPF, betRegistration);
-            } else if (option == 2) {
-                a = newRandomBet(bettorName, CPF, betRegistration);
-            }
-            betRegistry.addBets(a);
-        return a;
-    }
-
-    public Bet newSpecificBet(String bettorName, int CPF, int betRegistration) {
+    public Bet newSpecificBet(String bettorName, int CPF) {
         HashSet<Integer> wageredNumbers = new HashSet<>();
         System.out.println("Digite os números apostados: ");
 
@@ -44,15 +30,17 @@ public class BetCreator {
                 in.next(); // discard the non-integer input
             }
         }
+        betRegistration++;
         return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
     }
 
-    public Bet newRandomBet(String bettorName, int CPF, int betRegistration) {
+    public Bet newRandomBet(String bettorName, int CPF) {
         HashSet<Integer> wageredNumbers = new HashSet<>();
         while (wageredNumbers.size() < 5) {
             int randomNumber = (int) (Math.random() * 50 + 1);
             wageredNumbers.add(randomNumber);
         }
+        betRegistration++;
         return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
     }
 

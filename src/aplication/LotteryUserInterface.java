@@ -1,11 +1,8 @@
 package aplication;
 
 import data.*;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.Arrays;
-
 
 public class LotteryUserInterface {
     private Scanner in;
@@ -18,7 +15,7 @@ public class LotteryUserInterface {
     public LotteryUserInterface() {
         this.in = new Scanner(System.in);
         this.betRegistry = new BetRegistry();
-        this.betCreator = new BetCreator(betRegistry);
+        this.betCreator = new BetCreator();
         this.lotteryRunner = new LotteryRunner(betRegistry, betCreator);
         this.awards = new Awards();
 
@@ -79,7 +76,7 @@ public class LotteryUserInterface {
                     }
                     break;
                 case 4:
-                    System.out.println("Os premios concorridos são: ");
+                    System.out.println("Os prêmios concorridos são: ");
                     System.out.println(awards.toString());
                     break;
                 default:
@@ -93,10 +90,13 @@ public class LotteryUserInterface {
             System.out.println("Digite o nome do apostador: ");
             String bettorName = in.next();
             System.out.println("Digite o CPF do apostador: ");
-            int CPF = 0;
+            int CPF;
             while (true) {
                 try{
                     CPF = in.nextInt();
+                    if (CPF < 0) {
+                        throw new InputMismatchException(); // throw exception if number is negative
+                    }
                     break;
                 } catch (InputMismatchException e) {
                     System.out.println("CPF inválido. Digite um número inteiro: ");
@@ -109,21 +109,26 @@ public class LotteryUserInterface {
             System.out.println("1 - Números específicos");
             System.out.println("2 - Aleatório");
             System.out.print("Digite a opção desejada: ");
-            int option = 0;
+            int option;
             while (true) {
                 try {
                     option = in.nextInt();
                     if (option != 1 && option != 2) {
                         throw new InputMismatchException(); // throw exception if option is not 1 or 2
                     }
+                    Bet a;
+                    if (option == 1) {
+                        a = betCreator.newSpecificBet(bettorName, CPF);
+                    } else {
+                        a = betCreator.newRandomBet(bettorName, CPF);
+                    }
+                    betRegistry.addBets(a);
                     break;
                 } catch (InputMismatchException e) {
                     System.out.println("Opção inválida. Digite novamente: ");
                     in.nextLine();
                 }
             }
-            betCreator.newBet(bettorName, CPF, option);
-
         } catch (Exception e) {
             System.out.println("Ocorreu um erro ao processar a nova aposta: " + e.getMessage());
         }
