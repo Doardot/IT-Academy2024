@@ -1,31 +1,59 @@
 package aplication;
 
 import data.*;
+import java.util.HashSet;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class BetCreator {
     private BetRegistry betRegistry;
-    private Bets bets;
     private int betRegistration = 999;
+    private Scanner in;
 
-    public BetCreator(BetRegistry betRegistry, Bets bets) {
+    public BetCreator(BetRegistry betRegistry) {
         this.betRegistry = betRegistry;
-        this.bets = bets;
+        this.in = new Scanner(System.in);
     }
 
     public Bet newBet(String bettorName, int CPF, int option) {
         Bet a = null;
-//        try {
             betRegistration++;
             if (option == 1) {
-                a = bets.newSpecificBet(bettorName, CPF, betRegistration);
+                a = newSpecificBet(bettorName, CPF, betRegistration);
             } else if (option == 2) {
-                a = bets.newRandomBet(bettorName, CPF, betRegistration);
+                a = newRandomBet(bettorName, CPF, betRegistration);
             }
             betRegistry.addBets(a);
-//        } catch (Exception e) {
-//            System.out.println("Ocorreu um erro ao processar a nova aposta: " + e.getMessage());
-//        }
         return a;
+    }
+
+    public Bet newSpecificBet(String bettorName, int CPF, int betRegistration) {
+        HashSet<Integer> wageredNumbers = new HashSet<>();
+        System.out.println("Digite os números apostados: ");
+
+        while (wageredNumbers.size() < 5) {
+            try {
+                int number = in.nextInt();
+                if (number < 1 || number > 50) {
+                    System.out.println("Número inválido. Digite um número entre 1 a 50: ");
+                } else if (!wageredNumbers.add(number)) {
+                    System.out.println("Número já apostado. Digite novamente: ");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Digite um número inteiro: ");
+                in.next(); // discard the non-integer input
+            }
+        }
+        return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
+    }
+
+    public Bet newRandomBet(String bettorName, int CPF, int betRegistration) {
+        HashSet<Integer> wageredNumbers = new HashSet<>();
+        while (wageredNumbers.size() < 5) {
+            int randomNumber = (int) (Math.random() * 50 + 1);
+            wageredNumbers.add(randomNumber);
+        }
+        return new Bet(bettorName, CPF, betRegistration, wageredNumbers);
     }
 
     public void resetBetRegistration() {

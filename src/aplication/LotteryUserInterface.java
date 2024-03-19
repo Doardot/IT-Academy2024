@@ -11,7 +11,6 @@ public class LotteryUserInterface {
     private Scanner in;
     private BetRegistry betRegistry;
     private BetCreator betCreator;
-    private Bets bets;
     private LotteryRunner lotteryRunner;
     private Awards awards;
 
@@ -19,8 +18,7 @@ public class LotteryUserInterface {
     public LotteryUserInterface() {
         this.in = new Scanner(System.in);
         this.betRegistry = new BetRegistry();
-        this.bets = new Bets();
-        this.betCreator = new BetCreator(betRegistry, bets);
+        this.betCreator = new BetCreator(betRegistry);
         this.lotteryRunner = new LotteryRunner(betRegistry, betCreator);
         this.awards = new Awards();
 
@@ -121,6 +119,7 @@ public class LotteryUserInterface {
                     break;
                 } catch (InputMismatchException e) {
                     System.out.println("Opção inválida. Digite novamente: ");
+                    in.nextLine();
                 }
             }
             betCreator.newBet(bettorName, CPF, option);
