@@ -1,6 +1,8 @@
 package aplication;
 
 import data.*;
+
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -117,10 +119,29 @@ public class LotteryUserInterface {
                         throw new InputMismatchException(); // throw exception if option is not 1 or 2
                     }
                     Bet a;
+                    HashSet<Integer> wageredNumbers = new HashSet<>();
                     if (option == 1) {
-                        a = betCreator.newSpecificBet(bettorName, CPF);
+                        System.out.println("Digite os números apostados: ");
+                        while (wageredNumbers.size() < 5) {
+                            try {
+                                int number = in.nextInt();
+                                if (number < 1 || number > 50) {
+                                    System.out.println("Número inválido. Digite um número entre 1 a 50: ");
+                                } else if (!wageredNumbers.add(number)) {
+                                    System.out.println("Número já apostado. Digite novamente: ");
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("Entrada inválida. Digite um número inteiro: ");
+                                in.next(); // discard the non-integer input
+                            }
+                        }
+                        a = betCreator.newSpecificBet(bettorName, CPF, wageredNumbers);
                     } else {
-                        a = betCreator.newRandomBet(bettorName, CPF);
+                        while (wageredNumbers.size() < 5) {
+                            int randomNumber = (int) (Math.random() * 50 + 1);
+                            wageredNumbers.add(randomNumber);
+                        }
+                        a = betCreator.newRandomBet(bettorName, CPF, wageredNumbers);
                     }
                     betRegistry.addBets(a);
                     break;
