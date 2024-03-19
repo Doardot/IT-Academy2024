@@ -1,16 +1,19 @@
 package aplication;
 
-import java.lang.reflect.Array;
-import java.util.*;
-
 import data.*;
+import java.util.HashSet;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+import java.util.Arrays;
+
 
 public class LotteryUserInterface {
-    private Scanner in = null;
+    private Scanner in;
     private BetRegistry betRegistry;
     private BetCreator betCreator;
     private Bets bets;
     private LotteryRunner lotteryRunner;
+    private Awards awards;
 
 
     public LotteryUserInterface() {
@@ -19,9 +22,27 @@ public class LotteryUserInterface {
         this.bets = new Bets();
         this.betCreator = new BetCreator(betRegistry, bets);
         this.lotteryRunner = new LotteryRunner(betRegistry, betCreator);
+        this.awards = new Awards();
 
+//        usuariosDeTeste();
         menu();
     }
+
+//    public void usuariosDeTeste() {
+//        HashSet<Integer> numerosApostadosMais5 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+//                11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
+//                33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50));
+//        HashSet<Integer> numerosApostados5 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
+//        Bet a = new Bet("Poggers", 123456789, 1, numerosApostadosMais5);
+//        Bet b = new Bet("Ana", 987654321, 2, numerosApostadosMais5);
+//
+//        betRegistry.addBets(a);
+//        betRegistry.addBets(b);
+//        betCreator.newBet("João", 123456789, 2);
+//        betCreator.newBet("Maria", 987654321, 2);
+//        betCreator.newBet("José", 123456789, 2);
+//        betCreator.newBet("Ana", 987654321, 2);
+//    }
 
     public void menu() {
         int option;
@@ -30,8 +51,18 @@ public class LotteryUserInterface {
             System.out.println("1 - Nova aposta");
             System.out.println("2 - Conferir lista de apostas");
             System.out.println("3 - Executar sorteio");
+            System.out.println("4 - Checar premiação");
             System.out.print("Digite a opcao desejada: ");
-            option = in.nextInt();
+
+            while(true) {
+                try {
+                    option = in.nextInt();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Opção inválida. Digite um número entre 0 a 4: ");
+                    in.next();
+                }
+            }
 
             switch (option) {
                 case 0:
@@ -49,8 +80,12 @@ public class LotteryUserInterface {
                         lotteryRunner.runLotteryDraw();
                     }
                     break;
+                case 4:
+                    System.out.println("Os premios concorridos são: ");
+                    System.out.println(awards.toString());
+                    break;
                 default:
-                    System.out.println("Opcao invalida");
+                    System.out.println("Opção inválida. Digite um número entre 0 a 4: ");
             }
         } while (option != 0);
     }

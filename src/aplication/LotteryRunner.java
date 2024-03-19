@@ -1,16 +1,24 @@
 package aplication;
 
 import data.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 public class LotteryRunner {
     private BetRegistry betRegistry;
     private BetCreator betCreator;
+    private Awards awards;
 
     public LotteryRunner(BetRegistry betRegistry, BetCreator betCreator) {
         this.betRegistry = betRegistry;
         this.betCreator = betCreator;
+        this.awards = new Awards();
     }
 
     public void runLotteryDraw() { //metodo esta rodando entre 23 e 26 vezes > corrigir
@@ -27,13 +35,13 @@ public class LotteryRunner {
 
                 if(determineWinners(drawNumbers)) {
                     System.out.println("\nVencedor encontrado após " + (attempt) + " rodadas.");
-                    System.out.println("\nNúmeros sorteados: " + drawNumbers.toString());
+                    System.out.println("\nNúmeros sorteados: " + drawNumbers);
                     break;
                 }
 
                 if (drawNumbers.size() == maxAttempt) {
                     System.out.println("\nNenhum vencedor encontrado após " + maxAttempt + " tentativas.");
-                    System.out.println("\nNúmeros sorteados: " + drawNumbers.toString());
+                    System.out.println("\nNúmeros sorteados: " + drawNumbers);
 
                 }
             }
@@ -48,24 +56,13 @@ public class LotteryRunner {
 
     private boolean determineWinners(HashSet<Integer> drawNumbers) {
         ArrayList<Bet> winners = new ArrayList<>();
-        //HashSet<Integer> numerosSorteadosSet = new HashSet<>(numerosSorteados);
 
         for (Bet a : betRegistry.getBets()) {
             HashSet<Integer> betNumbers = new HashSet<>(a.getWagaredNumbers());
-//            ArrayList<Integer> numerosApostados = a.getWagaredNumbers();
-//            int count = 0;
             betNumbers.retainAll(drawNumbers);
             if(betNumbers.size() == 5) {
                 winners.add(a);
             }
-//            for (int numero : numerosApostados) {
-//                if (numerosSorteadosSet.contains(numero)) {
-//                    count++;
-//                }
-//            }
-//            if (count == 5) {
-//                vencedores.add(a);
-//            }
         }
 
         if (!winners.isEmpty()) {
@@ -78,9 +75,10 @@ public class LotteryRunner {
             });
             System.out.println("Vencedores:");
             for (Bet v : winners) {
+                String award = awards.pickRandomAwards();
                 System.out.println(
                         "\nNome do apostador: " + v.getBettorName() + "\nNúmeros apostados: " +
-                                v.getWagaredNumbers().toString());
+                                v.getWagaredNumbers().toString() + "\nPrêmio: " + award);
             }
             return true;
         }
