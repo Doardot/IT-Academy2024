@@ -13,6 +13,10 @@ public class Awards {
         generateAwards();
     }
 
+    /**
+     * This method is used to generate a list of awards.
+     * It adds a series of predefined awards to the 'awards' ArrayList.
+     */
     public void generateAwards(){
         awards.add("R$ 100,00");
         awards.add("Uma banana");
@@ -31,11 +35,21 @@ public class Awards {
         awards.add("Um cavalo");
     }
 
+    /**
+     * This method is used to pick a random award from the 'awards' ArrayList.
+     * It generates a random index within the range of the 'awards' ArrayList size.
+     * Then, it returns the award at the generated random index.
+     */
     public String pickRandomAwards() {
         int randomIndex = random.nextInt(awards.size());
         return awards.get(randomIndex);
     }
 
+    /**
+     * This method is used to convert the 'awards' ArrayList into a single string.
+     * It uses the "String.join" method to concatenate all the elements of the 'awards' ArrayList,
+     * separating them with a newline character ("\n").
+     */
     @Override
     public String toString() {
         return String.join("\n", awards);
