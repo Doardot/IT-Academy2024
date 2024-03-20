@@ -6,29 +6,29 @@ import java.util.List;
 
 public class Bet {
     private final String bettorName;
-    private final int CPF;
+    private final String cpf;
     private final int betRegistration;
-    private final HashSet<Integer> wagaredNumbers;
+    private final HashSet<Integer> wageredNumbers;
 
-    public Bet(String bettorName, int CPF, int betRegistration, HashSet<Integer> wagaredNumbers) {
+    public Bet(String bettorName, String cpf, int betRegistration, HashSet<Integer> wageredNumbers) {
         this.bettorName = bettorName;
-        this.CPF = CPF;
+        this.cpf = cpf;
         this.betRegistration = betRegistration;
-        this.wagaredNumbers = wagaredNumbers;
+        this.wageredNumbers = wageredNumbers;
     }
 
     public String getBettorName() {
         return bettorName;
     }
 
-    public List<Integer> getWagaredNumbers() {
-        return new ArrayList<>(wagaredNumbers);
+    public List<Integer> getWageredNumbers() {
+        return new ArrayList<>(wageredNumbers);
     }
 
     public String toString() {
         return "Nome do apostador: " + bettorName +
-                "\nCPF: " + CPF +
+                "\nCPF: " + cpf +
                 "\nRegistro da aposta: " + betRegistration +
-                "\nNúmeros apostados: " + wagaredNumbers.toString();
+                "\nNúmeros apostados: " + wageredNumbers.toString();
     }
 }

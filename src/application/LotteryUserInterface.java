@@ -1,7 +1,6 @@
-package aplication;
+package application;
 
 import data.*;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -32,7 +31,7 @@ public class LotteryUserInterface {
             System.out.println("2 - Conferir lista de apostas");
             System.out.println("3 - Executar sorteio");
             System.out.println("4 - Checar premiação");
-            System.out.print("Digite a opcao desejada: ");
+            System.out.print("Digite a opção desejada: ");
 
             while(true) {
                 try {
@@ -84,17 +83,16 @@ public class LotteryUserInterface {
             System.out.println("Digite o nome do apostador: ");
             String bettorName = in.next();
             System.out.println("Digite o CPF do apostador: ");
-            int CPF;
+            String cpf;
             while (true) {
                 try{
-                    CPF = in.nextInt();
-                    if (CPF < 0) {
-                        throw new InputMismatchException(); // Throw exception if number is negative
+                    cpf = in.next();
+                    if (cpf.length() != 11) {
+                        throw new InputMismatchException(); // Throw exception if CPF is not 11 digits long
                     }
                     break;
                 } catch (InputMismatchException e) { // Catch exception if input is not an integer
-                    System.out.println("CPF inválido. Digite um número inteiro: ");
-                    in.next();
+                    System.out.println("CPF inválido. Digite um número inteiro de 11 dígitos: ");
                 }
             }
 
@@ -127,13 +125,13 @@ public class LotteryUserInterface {
                                 in.next(); // Discard the non-integer input
                             }
                         }
-                        a = betCreator.newSpecificBet(bettorName, CPF, wageredNumbers);
+                        a = betCreator.newSpecificBet(bettorName, cpf, wageredNumbers);
                     } else {
                         while (wageredNumbers.size() < 5) {
                             int randomNumber = (int) (Math.random() * 50 + 1);
                             wageredNumbers.add(randomNumber);
                         }
-                        a = betCreator.newRandomBet(bettorName, CPF, wageredNumbers);
+                        a = betCreator.newRandomBet(bettorName, cpf, wageredNumbers);
                     }
                     betRegistry.addBets(a);
                     break;

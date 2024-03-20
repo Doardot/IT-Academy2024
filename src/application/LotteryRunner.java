@@ -1,4 +1,4 @@
-package aplication;
+package application;
 
 import data.*;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class LotteryRunner {
         try{
             betRegistry.closeBets();
             int count = 5; // Number of wagered numbers
-            int maxAttempt = 26; // Maximum number of attempts
+            int maxAttempt = 30; // Maximum number of attempts
             LinkedHashSet<Integer> drawNumbers = new LinkedHashSet<>();
 
             for (int attempt = 0; attempt < maxAttempt ; attempt++) {
@@ -54,7 +54,7 @@ public class LotteryRunner {
                 }
             }
 
-            frequencyOfWagaredNumbers();
+            frequencyOfWageredNumbers();
             betRegistry.resetBets();
             betCreator.resetBetRegistration();
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class LotteryRunner {
         ArrayList<Bet> winners = new ArrayList<>();
 
         for (Bet a : betRegistry.getBets()) {
-            HashSet<Integer> betNumbers = new HashSet<>(a.getWagaredNumbers());
+            HashSet<Integer> betNumbers = new HashSet<>(a.getWageredNumbers());
             betNumbers.retainAll(drawNumbers);
             if(betNumbers.size() == 5) {
                 winners.add(a);
@@ -88,7 +88,7 @@ public class LotteryRunner {
             for (Bet v : winners) {
                 String award = awards.pickRandomAwards();
                 String winnerInfo = "Nome do apostador: " + v.getBettorName() + "\nNúmeros apostados: " +
-                        v.getWagaredNumbers().toString() + "\nPrêmio: " + award;
+                        v.getWageredNumbers().toString() + "\nPrêmio: " + award;
                 System.out.println(winnerInfo);
                 BettingSaveHistory.saveToFile(winnerInfo, "WinnerHistory.txt");
             }
@@ -106,17 +106,17 @@ public class LotteryRunner {
      * frequency map and sorts it in descending order based on the frequency of each number;
      * 4- Finally, it prints a table showing the wagered number and its corresponding frequency.
      */
-    private void frequencyOfWagaredNumbers() {
+    private void frequencyOfWageredNumbers() {
         HashMap<Integer, Integer> frequencyNumbers = new HashMap<>();
 
         for (Bet bet : betRegistry.getBets()) {
-            for (int numero : bet.getWagaredNumbers()) {
-                frequencyNumbers.put(numero, frequencyNumbers.getOrDefault(numero, 0) + 1);
+            for (int number : bet.getWageredNumbers()) {
+                frequencyNumbers.put(number, frequencyNumbers.getOrDefault(number, 0) + 1);
             }
         }
-        List<Map.Entry<Integer, Integer>> listaOrdenada = new ArrayList<>(frequencyNumbers.entrySet());
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(frequencyNumbers.entrySet());
 
-        listaOrdenada.sort((entry1, entry2) -> {
+        list.sort((entry1, entry2) -> {
             return entry2.getValue().compareTo(entry1.getValue()); // Sort the list in descending order
         });
 
