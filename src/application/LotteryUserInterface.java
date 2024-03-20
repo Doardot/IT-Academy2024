@@ -81,7 +81,8 @@ public class LotteryUserInterface {
     public void newBet() {
         try {
             System.out.println("Digite o nome do apostador: ");
-            String bettorName = in.next();
+            in.nextLine(); // Consume the newline character left by the previous nextInt() call
+            String bettorName = in.nextLine();
             System.out.println("Digite o CPF do apostador: ");
             String cpf;
             while (true) {
