@@ -90,6 +90,11 @@ public class LotteryUserInterface {
                     if (cpf.length() != 11) {
                         throw new InputMismatchException(); // Throw exception if CPF is not 11 digits long
                     }
+                    for(char c : cpf.toCharArray()) {
+                        if (!Character.isDigit(c)) {
+                            throw new InputMismatchException(); // Throw exception if CPF contains non-digit characters
+                        }
+                    }
                     break;
                 } catch (InputMismatchException e) { // Catch exception if input is not an integer
                     System.out.println("CPF inválido. Digite um número inteiro de 11 dígitos: ");
